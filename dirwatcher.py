@@ -46,6 +46,12 @@ def signal_handler(sig_num, frame):
     # log the associated signal name (the python3 way)
     logger.warning('Received ' + signal.Signals(sig_num).name)
 
+    if signal.Signals(sig_num).name == 'SIGINT':
+        logger.info('Terminating dirwatcher -- keyboard interrupt signal')
+
+    if signal.Signals(sig_num).name == 'SIGTERM':
+        logger.info('Terminating dirwatcher -- OS interrupt signal')
+
     global exit_flag
     exit_flag = True
 
@@ -84,7 +90,7 @@ def read_dir(directory, extension):
           f"{time.asctime(time.localtime(time.time()))}...")
     print("Watched files:")
     print("{file name: last scanned line,...}")
-    print("-"*50)
+    print("-"*80)
     print(watched_files)
 
 
@@ -99,8 +105,9 @@ def main():
     # process.
 
     start_time = time.time()
-    print('\n\nStarted watching on: ' +
+    print('\n\nStarted watching on: ',
           time.asctime(time.localtime(time.time())))
+    print("-"*80)
     while not exit_flag:
         try:
             read_dir(args.dir, args.ext)
@@ -108,8 +115,6 @@ def main():
                 scan_file(args.dir+"/"+f, watched_files[f], args.text)
         except Exception as e:
             print(f"exception:{e}")
-            # if str(e) == "dictionary changed size during iteration":
-            #     print('file removed')
             # This is an UNHANDLED exception
             # Log an ERROR level message here
         # put a sleep inside my while loop so I don't peg the cpu usage at 100%
@@ -117,11 +122,13 @@ def main():
 
     # final exit point happens here
     # Log a message that we are shutting down
-    print('\n\nStopped watching on: ' +
+    print("-"*80)
+    print('Stopped watching on: ' +
           time.asctime(time.localtime(time.time())))
     # Include the overall uptime since program start.
     end_time = time.time()
-    print('Overall uptime: '+str(int(end_time-start_time))+' seconds')
+    print('Uptime was '+str(int(end_time-start_time))+' seconds')
+    print("-"*80)
 
 
 if __name__ == '__main__':
