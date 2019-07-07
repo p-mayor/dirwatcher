@@ -54,10 +54,11 @@ def scan_file(file, start_line_num, search_text):
     line_number = 0
     with open(file) as f:
         for line_number, line in enumerate(f):
+            watched_files[str(file.split('/')[1])] = line_number+1
             if line_number >= start_line_num:
                 if search_text in line:
-                    watched_files[str(file.split('/')[1])] = line_number+1
-                    print(f"found '{search_text}' on line {line_number+1}")
+                    print(f"found '{search_text}' on line {line_number+1} in \
+file {file}. timestamp: {time.asctime(time.localtime(time.time()))}")
     return line_number+1
 
 
@@ -71,12 +72,13 @@ def read_dir(directory, extension):
     for f in watched_files:
         if f not in file_list:
             del watched_files[f]
+    print(f"\n\nScanning {directory}...")
+    print("{file name: last scanned line,...}")
     print(watched_files)
 
 
 def main():
     args = create_parser().parse_args()
-    print(args)
 
     # hint code:
     # Hook these two signals from the OS ..
@@ -86,7 +88,8 @@ def main():
     # process.
 
     start_time = time.time()
-    print('\n\nStarted watching on:'+time.asctime(time.localtime(time.time())))
+    print('\n\nStarted watching on: ' +
+          time.asctime(time.localtime(time.time())))
     while not exit_flag:
         try:
             read_dir(args.dir, args.ext)
@@ -101,7 +104,8 @@ def main():
 
     # final exit point happens here
     # Log a message that we are shutting down
-    print('\n\nStopped watching on:'+time.asctime(time.localtime(time.time())))
+    print('\n\nStopped watching on: ' +
+          time.asctime(time.localtime(time.time())))
     # Include the overall uptime since program start.
     end_time = time.time()
     print('Overall uptime: '+str(int(end_time-start_time))+' seconds')
