@@ -44,7 +44,9 @@ def signal_handler(sig_num, frame):
     logging.basicConfig(level=logging.INFO)
     logger = logging.getLogger(__name__)
     # log the associated signal name (the python3 way)
-    logger.warning('Received ' + signal.Signals(sig_num).name)
+    logger.warning('Received ' + signal.Signals(sig_num).name +
+                   " timestamp: " + str(
+                       time.asctime(time.localtime(time.time()))))
 
     if signal.Signals(sig_num).name == 'SIGINT':
         logger.info('Terminating dirwatcher -- keyboard interrupt signal')
