@@ -30,6 +30,7 @@ def signal_handler(sig_num, frame):
     logger = logging.getLogger(__name__)
     # log the associated signal name (the python3 way)
     logger.warning('Received ' + signal.Signals(sig_num).name)
+
     global exit_flag
     exit_flag = True
 
@@ -55,7 +56,8 @@ def scan_file(file, start_line_num, search_text):
         for line_number, line in enumerate(f):
             if line_number >= start_line_num:
                 if search_text in line:
-                    print(f"found something on line {line_number+1}")
+                    watched_files[str(file.split('/')[1])] = line_number+1
+                    print(f"found '{search_text}' on line {line_number+1}")
     return line_number+1
 
 
@@ -64,11 +66,12 @@ def read_dir(directory, extension):
     file_list = os.listdir("./"+directory)
 
     for f in file_list:
-        if f.endswith(extension):
-            watched_files[f] = 1
+        if f.endswith(extension) and f not in watched_files:
+            watched_files[f] = 0
     for f in watched_files:
         if f not in file_list:
             del watched_files[f]
+    print(watched_files)
 
 
 def main():
@@ -82,21 +85,26 @@ def main():
     # Now my signal_handler will get called if OS sends either of these to my
     # process.
 
+    start_time = time.time()
+    print('\n\nStarted watching on:'+time.asctime(time.localtime(time.time())))
     while not exit_flag:
         try:
             read_dir(args.dir, args.ext)
             for f in watched_files:
-                scan_file(args.dir+"/"+f, 0, args.text)
+                scan_file(args.dir+"/"+f, watched_files[f], args.text)
         except Exception as e:
             print(e)
             # This is an UNHANDLED exception
             # Log an ERROR level message here
         # put a sleep inside my while loop so I don't peg the cpu usage at 100%
-        time.sleep(args.int)
+        time.sleep(int(args.int))
 
     # final exit point happens here
     # Log a message that we are shutting down
+    print('\n\nStopped watching on:'+time.asctime(time.localtime(time.time())))
     # Include the overall uptime since program start.
+    end_time = time.time()
+    print('Overall uptime: '+str(int(end_time-start_time))+' seconds')
 
 
 if __name__ == '__main__':
