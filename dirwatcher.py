@@ -114,7 +114,8 @@ def main():
             for f in watched_files:
                 scan_file(args.dir+"/"+f, watched_files[f], args.text)
         except Exception as e:
-            print(f"exception:{e}")
+            print(f"exception:{e} timestamp:",
+                  time.asctime(time.localtime(time.time())))
             # This is an UNHANDLED exception
             # Log an ERROR level message here
         # put a sleep inside my while loop so I don't peg the cpu usage at 100%
