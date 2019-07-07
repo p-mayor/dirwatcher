@@ -1,6 +1,6 @@
 # Dirwatcher
 
-A simple python 3 script that watches certain files in a directory for a certain text phrase and returns the line number where the phrase was found.
+A long running python 3 program that monitors certain file extensions in a directory for a certain text phrase.
 
 ## Arguments
 
