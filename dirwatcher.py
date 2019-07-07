@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 # -*- coding: utf-8 -*-
 """
-Watches the given directory for changes
+Watches input file extension in input directory for changes and
+scans for input text string, re-checking every polling interval.
 """
 __author__ = "p-mayor"
 
@@ -14,6 +15,20 @@ import logging
 
 watched_files = {}
 exit_flag = False
+
+
+def create_parser():
+    """Creates and returns an argparse cmd line option parser"""
+    parser = argparse.ArgumentParser(
+        description='Watch input directory for file changes')
+    parser.add_argument("-d", "--dir", default=".",
+                        help="directory to be watched, defaults to '.'")
+    parser.add_argument("-i", "--int", default=1,
+                        help="polling interval, defaults to 1 second")
+    parser.add_argument("-e", "--ext", default='.txt',
+                        help="extension to be watched, defaults to .txt")
+    parser.add_argument("text", help="text to be found")
+    return parser
 
 
 def signal_handler(sig_num, frame):
@@ -33,20 +48,6 @@ def signal_handler(sig_num, frame):
 
     global exit_flag
     exit_flag = True
-
-
-def create_parser():
-    """Creates and returns an argparse cmd line option parser"""
-    parser = argparse.ArgumentParser(
-        description='Watch input directory for file changes')
-    parser.add_argument("-d", "--dir", default=".",
-                        help="directory to be watched, defaults to '.'")
-    parser.add_argument("-i", "--int", default=1,
-                        help="polling interval, defaults to 1 second")
-    parser.add_argument("-e", "--ext", default='.txt',
-                        help="extension to be watched, defaults to .txt")
-    parser.add_argument("text", help="text to be found")
-    return parser
 
 
 def scan_file(file, start_line_num, search_text):
