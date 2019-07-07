@@ -70,11 +70,18 @@ def read_dir(directory, extension):
     for f in file_list:
         if f.endswith(extension) and f not in watched_files:
             watched_files[f] = 0
+            print(f"\n\n>>>>{f} added to directory. timestamp: \
+{time.asctime(time.localtime(time.time()))}")
     for f in watched_files:
         if f not in file_list:
+            print(f"\n\n>>>>{f} removed from directory. timestamp: \
+{time.asctime(time.localtime(time.time()))}")
             del watched_files[f]
-    print(f"\n\nScanning {directory}...")
+    print(f"\n\nScanning {os.getcwd()}/{directory} on \
+{time.asctime(time.localtime(time.time()))}...")
+    print("Watched files:")
     print("{file name: last scanned line,...}")
+    print("-"*50)
     print(watched_files)
 
 
@@ -97,7 +104,9 @@ def main():
             for f in watched_files:
                 scan_file(args.dir+"/"+f, watched_files[f], args.text)
         except Exception as e:
-            print(e)
+            print(f"exception:{e}")
+            # if str(e) == "dictionary changed size during iteration":
+            #     print('file removed')
             # This is an UNHANDLED exception
             # Log an ERROR level message here
         # put a sleep inside my while loop so I don't peg the cpu usage at 100%
