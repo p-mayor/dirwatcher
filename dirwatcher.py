@@ -62,12 +62,13 @@ def scan_file(file, start_line_num, search_text):
     '''read file and look for search text'''
     line_number = 0
     with open(file) as f:
+        print(f"Scanning {file}")
         for line_number, line in enumerate(f):
             watched_files[str(file.split('/')[1])] = line_number+1
             if line_number >= start_line_num:
                 if search_text in line:
                     print(f"found '{search_text}' on line {line_number+1}",
-                          f"in file {file}. timestamp:",
+                          " timestamp:",
                           time.asctime(time.localtime(time.time())))
     return line_number+1
 
@@ -79,13 +80,13 @@ def read_dir(directory, extension):
     for f in file_list:
         if f.endswith(extension) and f not in watched_files:
             watched_files[f] = 0
-            print(f"\n\n>>>> {f} found in directory. timestamp:",
-                  {time.asctime(time.localtime(time.time()))})
+            print(f">>>> {f} found in directory. timestamp:",
+                  time.asctime(time.localtime(time.time())))
 
     for f in watched_files:
         if f not in file_list:
-            print(f"\n\n>>>> {f} removed from directory. timestamp:",
-                  {time.asctime(time.localtime(time.time()))})
+            print(f">>>> {f} removed from directory. timestamp:",
+                  time.asctime(time.localtime(time.time())))
             del watched_files[f]
 
     print(f"\n\nScanning {os.getcwd()}/{directory} on",
