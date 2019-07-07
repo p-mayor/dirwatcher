@@ -27,36 +27,48 @@ optional arguments:
 ## Example Output 
 
 ```
-Started watching on: Sun Jul  7 18:55:49 2019
+--------------------------------------------------------------------------------
+Started watching on:  Sun Jul  7 19:56:06 2019
+--------------------------------------------------------------------------------
+>>>> test1.txt found in directory. timestamp: Sun Jul  7 19:56:06 2019
+>>>> test2.txt found in directory. timestamp: Sun Jul  7 19:56:06 2019
 
 
->>>> test4.txt found in directory. timestamp: {'Sun Jul  7 18:55:49 2019'}
-
-
->>>> test1.txt found in directory. timestamp: {'Sun Jul  7 18:55:49 2019'}
-
-
->>>> test2.txt found in directory. timestamp: {'Sun Jul  7 18:55:49 2019'}
-
-
-Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 18:55:49 2019...
+Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 19:56:06 2019...
 Watched files:
 {file name: last scanned line,...}
---------------------------------------------------
-{'test4.txt': 0, 'test1.txt': 0, 'test2.txt': 0}
-found 'hello' on line 1 in file test/test4.txt. timestamp: Sun Jul  7 18:55:49 2019
-found 'hello' on line 5 in file test/test4.txt. timestamp: Sun Jul  7 18:55:49 2019
+--------------------------------------------------------------------------------
+{'test1.txt': 0, 'test2.txt': 0}
+Scanning test/test1.txt
+found 'hello' on line 1  timestamp: Sun Jul  7 19:56:06 2019
+found 'hello' on line 7  timestamp: Sun Jul  7 19:56:06 2019
+found 'hello' on line 16  timestamp: Sun Jul  7 19:56:06 2019
+Scanning test/test2.txt
+found 'hello' on line 4  timestamp: Sun Jul  7 19:56:06 2019
+found 'hello' on line 20  timestamp: Sun Jul  7 19:56:06 2019
 
 
-Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 18:55:51 2019...
+Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 19:56:08 2019...
 Watched files:
 {file name: last scanned line,...}
---------------------------------------------------
-{'test4.txt': 5, 'test1.txt': 0, 'test2.txt': 4}
-^CWARNING:__main__:Received SIGINT
+--------------------------------------------------------------------------------
+{'test1.txt': 16, 'test2.txt': 20}
+Scanning test/test1.txt
+Scanning test/test2.txt
 
 
-Stopped watching on: Sun Jul  7 18:55:55 2019
-Overall uptime: 6 seconds
+Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 19:56:10 2019...
+Watched files:
+{file name: last scanned line,...}
+--------------------------------------------------------------------------------
+{'test1.txt': 16, 'test2.txt': 20}
+Scanning test/test1.txt
+Scanning test/test2.txt
+^CWARNING:__main__:Received SIGINT timestamp: Sun Jul  7 19:56:12 2019
+INFO:__main__:Terminating dirwatcher -- keyboard interrupt signal
+--------------------------------------------------------------------------------
+Stopped watching on: Sun Jul  7 19:56:12 2019
+Uptime was 6 seconds
+--------------------------------------------------------------------------------
 
 ```
