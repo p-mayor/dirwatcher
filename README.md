@@ -27,23 +27,36 @@ optional arguments:
 ## Example Output 
 
 ```
-Started watching on: Sun Jul  7 16:57:48 2019
+Started watching on: Sun Jul  7 18:55:49 2019
 
 
-Scanning test...
+>>>> test4.txt found in directory. timestamp: {'Sun Jul  7 18:55:49 2019'}
+
+
+>>>> test1.txt found in directory. timestamp: {'Sun Jul  7 18:55:49 2019'}
+
+
+>>>> test2.txt found in directory. timestamp: {'Sun Jul  7 18:55:49 2019'}
+
+
+Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 18:55:49 2019...
+Watched files:
 {file name: last scanned line,...}
-{'test1.txt': 0, 'test2.txt': 0, 'test3.txt': 0}
-found 'hello' on line 1 in file test/test1.txt. timestamp: Sun Jul  7 16:57:48 2019
-found 'hello' on line 7 in file test/test2.txt. timestamp: Sun Jul  7 16:57:48 2019
-found 'hello' on line 17 in file test/test2.txt. timestamp: Sun Jul  7 16:57:48 2019
+--------------------------------------------------
+{'test4.txt': 0, 'test1.txt': 0, 'test2.txt': 0}
+found 'hello' on line 1 in file test/test4.txt. timestamp: Sun Jul  7 18:55:49 2019
+found 'hello' on line 5 in file test/test4.txt. timestamp: Sun Jul  7 18:55:49 2019
 
-Scanning test...
+
+Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 18:55:51 2019...
+Watched files:
 {file name: last scanned line,...}
-{'test1.txt': 1, 'test2.txt': 17, 'test3.txt': 0}
+--------------------------------------------------
+{'test4.txt': 5, 'test1.txt': 0, 'test2.txt': 4}
 ^CWARNING:__main__:Received SIGINT
 
 
-Stopped watching on: Sun Jul  7 16:57:54 2019
+Stopped watching on: Sun Jul  7 18:55:55 2019
 Overall uptime: 6 seconds
 
 ```
