@@ -76,6 +76,8 @@ def scan_file(file, start_line_num, search_text):
 def read_dir(directory, extension):
     '''read files in directory ending in extension and update watched_files'''
     file_list = os.listdir("./"+directory)
+    print(f"\n\nScanning {os.getcwd()}/{directory} on",
+          f"{time.asctime(time.localtime(time.time()))}...")
 
     for f in file_list:
         if f.endswith(extension) and f not in watched_files:
@@ -89,8 +91,6 @@ def read_dir(directory, extension):
                   time.asctime(time.localtime(time.time())))
             del watched_files[f]
 
-    print(f"\n\nScanning {os.getcwd()}/{directory} on",
-          f"{time.asctime(time.localtime(time.time()))}...")
     print("Watched files:")
     print("{file name: last scanned line,...}")
     print("-"*80)
@@ -108,7 +108,8 @@ def main():
     # process.
 
     start_time = time.time()
-    print('\n\nStarted watching on: ',
+    print("-"*80)
+    print('Started watching on: ',
           time.asctime(time.localtime(time.time())))
     print("-"*80)
     while not exit_flag:
