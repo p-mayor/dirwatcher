@@ -62,7 +62,7 @@ def scan_file(file, start_line_num, search_text):
     '''read file and look for search text'''
     line_number = 0
     with open(file) as f:
-        print(f"Scanning {file}")
+        print(f"Scanning {str(file.split('/')[1])}...")
         for line_number, line in enumerate(f):
             watched_files[str(file.split('/')[1])] = line_number+1
             if line_number >= start_line_num:
@@ -76,7 +76,8 @@ def scan_file(file, start_line_num, search_text):
 def read_dir(directory, extension):
     '''read files in directory ending in extension and update watched_files'''
     file_list = os.listdir("./"+directory)
-    print(f"\n\nScanning {os.getcwd()}/{directory} on",
+    print("-"*80)
+    print(f"Scanning {os.getcwd()}/{directory} on",
           f"{time.asctime(time.localtime(time.time()))}...")
 
     for f in file_list:
@@ -92,8 +93,7 @@ def read_dir(directory, extension):
             del watched_files[f]
 
     print("Watched files:")
-    print("{file name: last scanned line,...}")
-    print("-"*80)
+    print("{file name: last scanned line}")
     print(watched_files)
 
 
@@ -111,7 +111,6 @@ def main():
     print("-"*80)
     print('Started watching on: ',
           time.asctime(time.localtime(time.time())))
-    print("-"*80)
     while not exit_flag:
         try:
             read_dir(args.dir, args.ext)
