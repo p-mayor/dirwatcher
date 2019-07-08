@@ -4,15 +4,21 @@
 Watches input file extension in input directory for changes and
 scans for input text string, re-checking every polling interval.
 """
-__author__ = "p-mayor"
+__author__ = "p-mayor w/ help from piero"
 
 import os
 import argparse
 import time
 import signal
 import logging
+import errno
 
-
+logging.basicConfig(
+    format='%(asctime)s.%(msecs)03d %(name)-12s %(levelname)-8s %(message)s',
+    datefmt='%Y-%m-%d %H:%M:%S',
+    level=logging.DEBUG
+)
+logger = logging.getLogger(__name__)
 watched_files = {}
 exit_flag = False
 
@@ -37,16 +43,9 @@ def signal_handler(sig_num, frame):
     as well (SIGHUP?)
     Basically it just sets a global flag, and main() will exit it's loop if
     the signal is trapped.
-    :param sig_num: The integer signal number that was trapped from the OS.
-    :param frame: Not used
-    :return None
     """
-    logging.basicConfig(level=logging.INFO)
-    logger = logging.getLogger(__name__)
     # log the associated signal name (the python3 way)
-    logger.warning('Received ' + signal.Signals(sig_num).name +
-                   " timestamp: " + str(
-                       time.asctime(time.localtime(time.time()))))
+    logger.warning('Received ' + signal.Signals(sig_num).name)
 
     if signal.Signals(sig_num).name == 'SIGINT':
         logger.info('Terminating dirwatcher -- keyboard interrupt signal')
@@ -62,42 +61,45 @@ def scan_file(file, start_line_num, search_text):
     '''read file and look for search text'''
     line_number = 0
     with open(file) as f:
-        print(f"Scanning {str(file.split('/')[1])}...")
         for line_number, line in enumerate(f):
-            watched_files[str(file.split('/')[1])] = line_number+1
+            # watched_files[str(file.split('/')[1])] = line_number+1
             if line_number >= start_line_num:
                 if search_text in line:
-                    print(f"found '{search_text}' on line {line_number+1}",
-                          " timestamp:",
-                          time.asctime(time.localtime(time.time())))
+                    logger.info(
+                        f"{file}: found '{search_text}' on"
+                        f" line {line_number+1}"
+                    )
     return line_number+1
 
 
-def read_dir(directory, extension):
+def read_dir(directory, extension, search_text):
     '''read files in directory ending in extension and update watched_files'''
-    file_list = os.listdir("./"+directory)
-    print("-"*80)
-    print(f"Scanning {os.getcwd()}/{directory} on",
-          f"{time.asctime(time.localtime(time.time()))}...")
+    file_list = os.listdir(directory)
 
     for f in file_list:
         if f.endswith(extension) and f not in watched_files:
             watched_files[f] = 0
-            print(f">>>> {f} found in directory. timestamp:",
-                  time.asctime(time.localtime(time.time())))
+            logger.info(f"{f} added to watchlist.")
 
-    for f in watched_files:
+    for f in list(watched_files):
         if f not in file_list:
-            print(f">>>> {f} removed from directory. timestamp:",
-                  time.asctime(time.localtime(time.time())))
+            logger.info(f"{f} removed from watchlist.")
             del watched_files[f]
 
-    print("Watched files:")
-    print("{file name: last scanned line}")
-    print(watched_files)
+    for f in watched_files:
+        watched_files[f] = scan_file(
+            os.path.join(directory, f),
+            watched_files[f],
+            search_text
+        )
+
+    # print("Watched files:")
+    # print("{file name: last scanned line}")
+    # print(watched_files)
 
 
 def main():
+    '''parses command line and launches forever while loop'''
     args = create_parser().parse_args()
 
     # hint code:
@@ -108,17 +110,25 @@ def main():
     # process.
 
     start_time = time.time()
-    print("-"*80)
-    print('Started watching on: ',
-          time.asctime(time.localtime(time.time())))
+    logger.info("\n"
+                "----------------------------------------------------\n"
+                f"Started {__file__}.\n"
+                "----------------------------------------------------\n")
+    logger.info(
+        "Scanning {} for files ending in {} that"
+        " contain {}".format(args.dir, args.ext, args.text)
+    )
     while not exit_flag:
         try:
-            read_dir(args.dir, args.ext)
-            for f in watched_files:
-                scan_file(args.dir+"/"+f, watched_files[f], args.text)
+            read_dir(args.dir, args.ext, args.text)
+        except OSError as e:
+            if e.errno == errno.ENOENT:
+                logger.error(f"{args.dir} directory not found")
+                time.sleep(5)
+            else:
+                logger.error(e)
         except Exception as e:
-            print(f"exception:{e} timestamp:",
-                  time.asctime(time.localtime(time.time())))
+            logger.error(f"UNHANDLED EXCEPTION:{e}")
             # This is an UNHANDLED exception
             # Log an ERROR level message here
         # put a sleep inside my while loop so I don't peg the cpu usage at 100%
@@ -126,13 +136,13 @@ def main():
 
     # final exit point happens here
     # Log a message that we are shutting down
-    print("-"*80)
-    print('Stopped watching on: ' +
-          time.asctime(time.localtime(time.time())))
-    # Include the overall uptime since program start.
     end_time = time.time()
-    print('Uptime was '+str(int(end_time-start_time))+' seconds')
-    print("-"*80)
+    logger.info("\n"
+                "----------------------------------------------------\n"
+                "Stopped watching\n"
+                'Uptime was '+str(int(end_time-start_time))+' seconds\n'
+                "----------------------------------------------------\n"
+                )
 
 
 if __name__ == '__main__':
