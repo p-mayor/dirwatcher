@@ -93,16 +93,11 @@ def read_dir(directory, extension, search_text):
             search_text
         )
 
-    # print("Watched files:")
-    # print("{file name: last scanned line}")
-    # print(watched_files)
-
 
 def main():
     '''parses command line and launches forever while loop'''
     args = create_parser().parse_args()
 
-    # hint code:
     # Hook these two signals from the OS ..
     signal.signal(signal.SIGINT, signal_handler)
     signal.signal(signal.SIGTERM, signal_handler)
@@ -129,13 +124,9 @@ def main():
                 logger.error(e)
         except Exception as e:
             logger.error(f"UNHANDLED EXCEPTION:{e}")
-            # This is an UNHANDLED exception
-            # Log an ERROR level message here
         # put a sleep inside my while loop so I don't peg the cpu usage at 100%
         time.sleep(int(args.int))
 
-    # final exit point happens here
-    # Log a message that we are shutting down
     end_time = time.time()
     logger.info("\n"
                 "----------------------------------------------------\n"
@@ -143,6 +134,7 @@ def main():
                 'Uptime was '+str(int(end_time-start_time))+' seconds\n'
                 "----------------------------------------------------\n"
                 )
+    logging.shutdown()
 
 
 if __name__ == '__main__':
