@@ -27,43 +27,21 @@ optional arguments:
 ## Example Output 
 
 ```
---------------------------------------------------------------------------------
-Started watching on:  Sun Jul  7 20:28:43 2019
---------------------------------------------------------------------------------
-Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 20:28:43 2019...
->>>> test1.txt found in directory. timestamp: Sun Jul  7 20:28:43 2019
->>>> test2.txt found in directory. timestamp: Sun Jul  7 20:28:43 2019
->>>> test3.txt found in directory. timestamp: Sun Jul  7 20:28:43 2019
-Watched files:
-{file name: last scanned line}
-{'test1.txt': 0, 'test2.txt': 0, 'test3.txt': 0}
-Scanning test1.txt...
-Scanning test2.txt...
-found 'hello' on line 1  timestamp: Sun Jul  7 20:28:43 2019
-found 'hello' on line 6  timestamp: Sun Jul  7 20:28:43 2019
-Scanning test3.txt...
-found 'hello' on line 13  timestamp: Sun Jul  7 20:28:43 2019
---------------------------------------------------------------------------------
-Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 20:28:45 2019...
-Watched files:
-{file name: last scanned line}
-{'test1.txt': 0, 'test2.txt': 6, 'test3.txt': 19}
-Scanning test1.txt...
-Scanning test2.txt...
-Scanning test3.txt...
---------------------------------------------------------------------------------
-Scanning /Users/peter/Documents/code/dirwatcher/test on Sun Jul  7 20:28:47 2019...
-Watched files:
-{file name: last scanned line}
-{'test1.txt': 0, 'test2.txt': 6, 'test3.txt': 19}
-Scanning test1.txt...
-Scanning test2.txt...
-Scanning test3.txt...
-^CWARNING:__main__:Received SIGINT timestamp: Sun Jul  7 20:28:47 2019
-INFO:__main__:Terminating dirwatcher -- keyboard interrupt signal
---------------------------------------------------------------------------------
-Stopped watching on: Sun Jul  7 20:28:49 2019
-Uptime was 6 seconds
---------------------------------------------------------------------------------
+2019-07-09 10:45:54.678 __main__     INFO     
+----------------------------------------------------
+Started dirwatcher.py.
+----------------------------------------------------
+
+2019-07-09 10:45:54.678 __main__     INFO     Scanning test for files ending in .txt that contain hello
+2019-07-09 10:45:54.678 __main__     INFO     test3.txt added to watchlist.
+2019-07-09 10:45:54.679 __main__     INFO     test/test3.txt: found 'hello' on line 13
+^C2019-07-09 10:46:10.180 __main__     WARNING  Received SIGINT
+2019-07-09 10:46:10.180 __main__     INFO     Terminating dirwatcher -- keyboard interrupt signal
+2019-07-09 10:46:10.734 __main__     INFO     
+----------------------------------------------------
+Stopped watching
+Uptime was 16 seconds
+----------------------------------------------------
+
 
 ```
