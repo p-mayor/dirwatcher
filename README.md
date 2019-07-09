@@ -42,6 +42,4 @@ Started dirwatcher.py.
 Stopped watching
 Uptime was 16 seconds
 ----------------------------------------------------
-
-
 ```
